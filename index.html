@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Math TSIA2 Summer Bridge Student Slideshow</title>
+  <style>
+    :root {
+      --bg: #fffaf3;
+      --ink: #2f2b28;
+      --muted: #685d56;
+      --accent: #d9825b;
+      --accent-2: #f0b36b;
+      --accent-3: #c96454;
+      --card: #ffffff;
+      --border: #d8b894;
+      --green: #234a3a;
+      --shadow: rgba(71, 45, 25, 0.16);
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      font-family: Georgia, "Times New Roman", serif;
+      background: radial-gradient(circle at top left, #fff6e8, var(--bg));
+      color: var(--ink);
+    }
+    body { overflow: hidden; }
+    .deck {
+      height: 100dvh;
+      display: grid;
+      grid-template-rows: minmax(0, 1fr) auto;
+    }
+    .slide {
+      display: none;
+      height: calc(100dvh - 78px);
+      padding: clamp(16px, 4vw, 54px);
+      position: relative;
+      overflow: auto;
+    }
+    .slide.active {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      animation: fade 220ms ease-in-out;
+    }
+    @keyframes fade {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .frame {
+      border: 3px double var(--border);
+      background: rgba(255, 255, 255, 0.74);
+      min-height: min(82dvh, 760px);
+      width: min(1200px, 100%);
+      margin: 0 auto;
+      padding: clamp(24px, 4vw, 52px);
+      position: relative;
+      box-shadow: 0 14px 36px var(--shadow);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    h1, h2 {
+      margin: 0 0 clamp(14px, 2.5vw, 24px);
+      font-weight: 500;
+      line-height: 1.05;
+      color: #3f3936;
+    }
+    h1 { font-size: clamp(2.6rem, 7.2vw, 6.2rem); }
+    h2 { font-size: clamp(2rem, 5vw, 4.2rem); }
+    p, li, td, th, a {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: clamp(1rem, 1.55vw, 1.45rem);
+      line-height: 1.38;
+    }
+    p { margin: 0 0 16px; color: var(--muted); }
+    a {
+      color: #9c3f31;
+      font-weight: 800;
+      text-decoration: none;
+      overflow-wrap: anywhere;
+    }
+    a:hover { text-decoration: underline; }
+    .big {
+      font-size: clamp(1.28rem, 2.2vw, 2.05rem);
+      color: var(--ink);
+    }
+    .subtitle {
+      font-size: clamp(1.1rem, 2vw, 1.75rem);
+      max-width: 980px;
+      color: var(--muted);
+    }
+    .pill {
+      display: inline-block;
+      width: fit-content;
+      background: #fff0df;
+      border: 1px solid var(--border);
+      color: var(--accent-3);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-weight: 800;
+      margin-bottom: 18px;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: clamp(12px, 2vw, 18px);
+      margin-top: 14px;
+    }
+    .three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .card {
+      background: var(--card);
+      border: 1px solid #ead2b4;
+      border-radius: 18px;
+      padding: clamp(16px, 2.2vw, 22px);
+      box-shadow: 0 8px 20px rgba(71, 45, 25, .08);
+    }
+    .card strong { color: var(--accent-3); }
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 20px;
+    }
+    .flow-step {
+      border: 1px solid #e2c39f;
+      background: white;
+      border-radius: 16px;
+      padding: 18px;
+      text-align: center;
+      position: relative;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: clamp(1rem, 1.5vw, 1.35rem);
+    }
+    .flow-step:not(:last-child)::after {
+      content: "→";
+      position: absolute;
+      right: -18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--accent-3);
+      font-weight: 900;
+      font-size: 1.6rem;
+      z-index: 2;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 14px;
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(71, 45, 25, .08);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    th {
+      background: #f5dcc0;
+      text-align: left;
+      color: #3f3936;
+      font-weight: 800;
+    }
+    th, td {
+      padding: clamp(10px, 1.5vw, 16px);
+      border-bottom: 1px solid #ecd9c3;
+      vertical-align: top;
+    }
+    tr:last-child td { border-bottom: none; }
+    ul {
+      margin: 12px 0 0;
+      padding-left: 1.35em;
+    }
+    .quote {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.45rem, 3vw, 2.8rem);
+      line-height: 1.15;
+      color: #3f3936;
+      border-left: 8px solid var(--accent);
+      padding-left: 22px;
+      margin: 22px 0;
+    }
+    .tiny {
+      font-size: clamp(.8rem, 1.1vw, .95rem);
+      color: #82756d;
+    }
+    .center { text-align: center; }
+    .max { max-width: 1050px; }
+    .link-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 10px;
+    }
+    .link-card {
+      background: #ffffff;
+      border: 1px solid #ead2b4;
+      border-radius: 18px;
+      padding: 16px 18px;
+      box-shadow: 0 8px 20px rgba(71, 45, 25, .08);
+    }
+    .link-card .label {
+      display: block;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-weight: 900;
+      color: var(--accent-3);
+      margin-bottom: 4px;
+      font-size: clamp(1rem, 1.4vw, 1.25rem);
+    }
+    .teacher-grid {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 24px;
+      align-items: center;
+    }
+    .portrait-box {
+      min-height: 300px;
+      border: 2px dashed #d8b894;
+      border-radius: 22px;
+      background: #fff8ef;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      color: var(--muted);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      text-align: center;
+      font-weight: 700;
+    }
+    .controls {
+      height: 78px;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 24px;
+      border-top: 1px solid #e2c39f;
+      background: rgba(255, 250, 243, .96);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    button {
+      border: 1px solid var(--border);
+      background: white;
+      color: var(--ink);
+      padding: 12px 18px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(71, 45, 25, .08);
+    }
+    button:hover { background: #fff0df; }
+    button:disabled { opacity: .45; cursor: not-allowed; }
+    .progress {
+      text-align: center;
+      color: var(--muted);
+      font-weight: 800;
+    }
+    .hint {
+      text-align: right;
+      color: var(--muted);
+      font-size: .95rem;
+    }
+    .leaf {
+      position: absolute;
+      width: 112px;
+      height: 112px;
+      opacity: .85;
+      pointer-events: none;
+    }
+    .leaf.top { right: 20px; top: 14px; }
+    .leaf.bottom { left: 20px; bottom: 14px; transform: rotate(180deg); }
+    .leaf::before, .leaf::after {
+      content: "";
+      position: absolute;
+      border-radius: 60% 5% 60% 5%;
+      background: var(--green);
+      width: 58px;
+      height: 36px;
+      transform: rotate(45deg);
+    }
+    .leaf::before { left: 0; top: 18px; }
+    .leaf::after { right: 0; bottom: 24px; }
+    .flower {
+      position: absolute;
+      width: 44px;
+      height: 44px;
+      background: var(--accent-3);
+      border-radius: 50%;
+      left: 40px;
+      top: 46px;
+      box-shadow: 23px 8px 0 #d65345, 9px 25px 0 #cf6b54;
+    }
+    @media (max-width: 900px) {
+      body { overflow: auto; }
+      .deck { min-height: 100dvh; }
+      .slide {
+        height: auto;
+        min-height: calc(100dvh - 78px);
+        padding: 14px;
+      }
+      .slide.active { justify-content: flex-start; }
+      .frame {
+        min-height: calc(100dvh - 110px);
+        padding: 24px 20px;
+      }
+      .cards, .three, .link-grid, .teacher-grid { grid-template-columns: 1fr; }
+      .flow { grid-template-columns: 1fr; }
+      .flow-step:not(:last-child)::after {
+        content: "↓";
+        right: 50%;
+        top: auto;
+        bottom: -25px;
+        transform: translateX(50%);
+      }
+      .hint { display: none; }
+      .leaf { display: none; }
+      table { display: block; overflow-x: auto; }
+    }
+    @media print {
+      body { overflow: visible; background: white; }
+      .controls { display: none; }
+      .slide {
+        display: block !important;
+        page-break-after: always;
+        height: auto;
+        min-height: 100vh;
+        overflow: visible;
+      }
+      .frame { box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck">
+    <section class="slide active">
+      <div class="frame center">
+        <div class="leaf top"><span class="flower"></span></div>
+        <div class="leaf bottom"><span class="flower"></span></div>
+        <span class="pill">Math TSIA2 Summer Bridge</span>
+        <h1>Math TSI Test Preparation</h1>
+        <p class="subtitle" style="margin-inline:auto;">A student slideshow for Day 1 introduction, Day 2 focus skills, Day 3 Methodize practice, and Day 4 practice test readiness.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame">
+        <span class="pill">Day 1 · Slide 1</span>
+        <h2>Meet Your Teacher</h2>
+        <div class="teacher-grid">
+          <div>
+            <p class="big"><strong>Name:</strong> ______________________________</p>
+            <p class="big"><strong>School:</strong> _____________________________</p>
+            <p class="big"><strong>Why I teach math / STEM:</strong></p>
+            <p class="big">______________________________________________</p>
+            <p class="big">______________________________________________</p>
+          </div>
+          <div class="portrait-box">Add your photo, logo, QR code, or short personal intro here.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame center">
+        <span class="pill">Day 1 · Slide 2</span>
+        <h2>Know the Test</h2>
+        <p class="big max" style="margin-inline:auto;">Today is about understanding the Math TSIA2: what it is, how it works, how it is scored, and where to practice.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame">
+        <span class="pill">Day 1 · Slide 3</span>
+        <h2>What is the Math TSIA2?</h2>
+        <p class="big">The TSIA2 helps determine whether students are ready for college-level coursework in math.</p>
+        <div class="cards">
+          <div class="card"><p><strong>It is a readiness test.</strong><br>It checks what math you already know and what skills you may need to strengthen.</p></div>
+          <div class="card"><p><strong>It is not a label.</strong><br>A score gives information. It does not decide your intelligence or your future.</p></div>
+        </div>
+        <p style="margin-top: 22px;"><a href="https://accuplacer.collegeboard.org/students/free-tsia2-pre-assessment-and-practice-resources" target="_blank">Video / overview resource: Free TSIA2 PAA and Practice Resources</a></p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame">
+        <span class="pill">Day 1 · Slide 4</span>
+        <h2>Important Test Facts</h2>
+        <div class="cards">
+          <div class="card"><p><strong>Untimed</strong><br>Take your time and think carefully.</p></div>
+          <div class="card"><p><strong>Computer-adaptive</strong><br>The difficulty can adjust based on your answers.</p></div>
+          <div class="card"><p><strong>No handheld calculator</strong><br>Some questions provide an onscreen calculator.</p></div>
+          <div class="card"><p><strong>No skipping around</strong><br>Answer the question in front of you and move forward.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame">
+        <span class="pill">Day 1 · Slide 5</span>
+        <h2>The Math TSIA2 Has Two Possible Parts</h2>
+        <div class="flow">
+          <div class="flow-step"><strong>Start</strong><br>Math TSIA2</div>
+          <div class="flow-step"><strong>Part 1</strong><br>Math CRC<br>20 questions</div>
+          <div class="flow-step"><strong>950 or higher?</strong><br>Yes: done<br>No: diagnostic</div>
+          <div class="flow-step"><strong>Part 2</strong><br>Math Diagnostic<br>48 questions</div>
+        </div>
+        <p class="big" style="margin-top:30px;">College-ready in math usually means <strong>CRC 950+</strong> or <strong>CRC below 950 with Diagnostic Level 6</strong>.</p>
+        <p><a href="https://accuplacer.collegeboard.org/accuplacer/pdf/tsia2-interpreting-your-scores.pdf" target="_blank">Interpreting Your Scores guide</a></p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame">
+        <span class="pill">Day 1 · Slide 6</span>
+        <h2>Why the First Part Matters</h2>
+        <p class="quote">If you score high enough on the CRC, you do not take the diagnostic.</p>
+        <p class="big">Do your best on each question. Since the test is adaptive, every answer helps determine what you see next.</p>
+        <p class="big">If you do take the diagnostic, do not panic. It gives more detail about your strengths and focus skills.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame">
+        <span class="pill">Day 1 · Slide 7</span>
+        <h2>The 4 Math Categories</h2>
+        <div class="cards">
+          <div class="card"><p><strong>Quantitative Reasoning</strong><br>percents, ratios, proportions, rates, number sense</p></div>
+          <div class="card"><p><strong>Algebraic Reasoning</strong><br>equations, expressions, functions, graphs</p></div>
+          <div class="card"><p><strong>Geometric & Spatial Reasoning</strong><br>area, perimeter, volume, coordinate plane, shapes</p></div>
+          <div class="card"><p><strong>Probabilistic & Statistical Reasoning</strong><br>data, charts, mean, median, probability</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame">
+        <span class="pill">Day 1 · Slide 8</span>
+        <h2>Today’s Goal</h2>
+        <p class="big">By the end of today, you should be able to explain:</p>
+        <ul>
+          <li>what the Math TSIA2 is,</li>
+          <li>how the CRC and Diagnostic work,</li>
+          <li>what score path shows college readiness,</li>
+          <li>what math categories appear on the test,</li>
+          <li>and where to find practice resources.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame">
+        <span class="pill">Day 1 · Slide 9</span>
+        <h2>Resource Links</h2>
+        <p class="big">Use this slide as your one-stop link page.</p>
+        <div class="link-grid">
+          <div class="link-card"><span class="label">TSIA2 Student Portal</span><a href="https://tsia2.accuplacer.org/" target="_blank">Open student portal</a></div>
+          <div class="link-card"><span class="label">PAA + Practice Resources</span><a href="https://accuplacer.collegeboard.org/students/free-tsia2-pre-assessment-and-practice-resources" target="_blank">Open PAA/practice page</a></div>
+          <div class="link-card"><span class="label">Student Information Brochure</span><a href="https://accuplacer.collegeboard.org/accuplacer/pdf/tsia2-student-informational-brochure.pdf" target="_blank">Open brochure PDF</a></div>
+          <div class="link-card"><span class="label">Interpreting Your Scores</span><a href="https://accuplacer.collegeboard.org/accuplacer/pdf/tsia2-interpreting-your-scores.pdf" target="_blank">Open score guide PDF</a></div>
+          <div class="link-card"><span class="label">Math Sample Questions</span><a href="https://accuplacer.collegeboard.org/accuplacer/pdf/tsia2-mathematics-sample-questions.pdf" target="_blank">Open math sample questions</a></div>
+          <div class="link-card"><span class="label">More TSIA2 Resources</span><a href="https://accuplacer.collegeboard.org/students/tsia2-additional-resources" target="_blank">Open resources page</a></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame">
+        <span class="pill">Day 2</span>
+        <h2>Focus Skills: Recognize the Type</h2>
+        <p class="big">Before you solve, ask: <strong>What kind of math is this?</strong></p>
+        <table>
+          <thead><tr><th>If you see…</th><th>Think…</th></tr></thead>
+          <tbody>
+            <tr><td>percent, discount, tax, increase</td><td>Quantitative reasoning</td></tr>
+            <tr><td>x, equation, expression, function</td><td>Algebraic reasoning</td></tr>
+            <tr><td>shape, area, volume, coordinate plane</td><td>Geometry/spatial reasoning</td></tr>
+            <tr><td>chart, average, chance, data</td><td>Statistics/probability</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame">
+        <span class="pill">Day 2</span>
+        <h2>The First-Move Strategy</h2>
+        <p class="big">You do not need to know the full solution immediately. Start with the first smart move.</p>
+        <table>
+          <thead><tr><th>Question Type</th><th>First Move</th></tr></thead>
+          <tbody>
+            <tr><td>Percent</td><td>Convert to decimal or set up a proportion.</td></tr>
+            <tr><td>Ratio/rate</td><td>Label the units.</td></tr>
+            <tr><td>Equation</td><td>Isolate the variable.</td></tr>
+            <tr><td>Graph</td><td>Read the axes first.</td></tr>
+            <tr><td>Geometry</td><td>Write the formula before plugging in numbers.</td></tr>
+            <tr><td>Word problem</td><td>Circle what the question is asking.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame">
+        <span class="pill">Day 2</span>
+        <h2>Mistakes Are Data</h2>
+        <p class="big">When you miss a question, identify the mistake type.</p>
+        <div class="cards three">
+          <div class="card"><p><strong>Reading</strong><br>I misread the question.</p></div>
+          <div class="card"><p><strong>Vocabulary</strong><br>I did not understand a math term.</p></div>
+          <div class="card"><p><strong>Setup</strong><br>I chose the wrong equation or operation.</p></div>
+          <div class="card"><p><strong>Calculation</strong><br>I had the right idea but made an arithmetic mistake.</p></div>
+          <div class="card"><p><strong>Concept Gap</strong><br>I need to learn or review the skill.</p></div>
+          <div class="card"><p><strong>Pacing</strong><br>I rushed or got stuck too long.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame">
+        <span class="pill">Day 3</span>
+        <h2>Methodize: Practice With a Purpose</h2>
+        <p class="big">The goal is not to click through questions. The goal is to notice patterns.</p>
+        <div class="cards">
+          <div class="card"><p><strong>What do I already know?</strong><br>These are strengths to keep sharp.</p></div>
+          <div class="card"><p><strong>What do I miss?</strong><br>These become focus skills.</p></div>
+          <div class="card"><p><strong>Why did I miss it?</strong><br>Reading, setup, calculation, pacing, or concept gap?</p></div>
+          <div class="card"><p><strong>What should I practice next?</strong><br>Use the results to build a plan.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame">
+        <span class="pill">Day 3</span>
+        <h2>Methodize Checklist</h2>
+        <ul>
+          <li>Log in and find the TSIA2 Math practice area.</li>
+          <li>Use scratch paper for every problem that needs work.</li>
+          <li>Track missed questions by topic.</li>
+          <li>Review explanations instead of only checking the answer.</li>
+          <li>Choose one or two focus skills before the practice test.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame">
+        <span class="pill">Day 4</span>
+        <h2>Practice Test Day</h2>
+        <p class="quote">A practice test score is a map, not a label.</p>
+        <p class="big">Take it seriously, use your strategies, and learn what to practice next.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame">
+        <span class="pill">Day 4</span>
+        <h2>Practice Test Reminders</h2>
+        <div class="cards">
+          <div class="card"><p><strong>Read twice.</strong><br>First for the situation, second for the details.</p></div>
+          <div class="card"><p><strong>Use scratch paper.</strong><br>Do not trust mental math for multi-step problems.</p></div>
+          <div class="card"><p><strong>Choose a first move.</strong><br>Even if you are unsure, start somewhere logical.</p></div>
+          <div class="card"><p><strong>Check reasonableness.</strong><br>Eliminate answers that do not make sense.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="frame center">
+        <span class="pill">Final Thought</span>
+        <h2>Beat the Test by Understanding the Test</h2>
+        <p class="big max" style="margin-inline:auto;">You do not need to know every skill perfectly today. You need to know what the test looks like, how to practice, and what your next step should be.</p>
+      </div>
+    </section>
+
+    <nav class="controls">
+      <div>
+        <button id="prevBtn" onclick="moveSlide(-1)">← Previous</button>
+        <button id="nextBtn" onclick="moveSlide(1)">Next →</button>
+      </div>
+      <div class="progress" id="progress">Slide 1 of 18</div>
+      <div class="hint">Use ← → keys, spacebar, Home, or End</div>
+    </nav>
+  </main>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    let current = 0;
+    function showSlide(index) {
+      current = Math.max(0, Math.min(index, slides.length - 1));
+      slides.forEach((slide, i) => slide.classList.toggle('active', i === current));
+      document.getElementById('progress').textContent = `Slide ${current + 1} of ${slides.length}`;
+      document.getElementById('prevBtn').disabled = current === 0;
+      document.getElementById('nextBtn').disabled = current === slides.length - 1;
+      window.scrollTo(0, 0);
+    }
+    function moveSlide(delta) { showSlide(current + delta); }
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); moveSlide(1); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); moveSlide(-1); }
+      if (e.key === 'Home') { e.preventDefault(); showSlide(0); }
+      if (e.key === 'End') { e.preventDefault(); showSlide(slides.length - 1); }
+    });
+    showSlide(0);
+  </script>
+</body>
+</html>
