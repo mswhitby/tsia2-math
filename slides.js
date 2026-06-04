@@ -72,20 +72,27 @@
 
   /* ----------------------------------------------------------
      Touch/swipe support (mobile)
+     Only fires on clearly horizontal swipes (|dx| > |dy| * 1.5)
+     so vertical scrolling through cards/tables is unaffected.
   ---------------------------------------------------------- */
   let touchStartX = null;
+  let touchStartY = null;
 
   document.addEventListener("touchstart", (e) => {
     touchStartX = e.changedTouches[0].clientX;
+    touchStartY = e.changedTouches[0].clientY;
   }, { passive: true });
 
   document.addEventListener("touchend", (e) => {
-    if (touchStartX === null) return;
+    if (touchStartX === null || touchStartY === null) return;
     const dx = e.changedTouches[0].clientX - touchStartX;
-    if (Math.abs(dx) > 50) {
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    // Require meaningful horizontal distance AND more horizontal than vertical
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
       moveSlide(dx < 0 ? 1 : -1);
     }
     touchStartX = null;
+    touchStartY = null;
   }, { passive: true });
 
   /* ----------------------------------------------------------
