@@ -343,8 +343,6 @@ button {
   font-size: 1rem;
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(71, 45, 25, .08);
-  width: 110px;        /* uniform width so Prev and Next match */
-  text-align: center;
 }
 button:hover    { background: #fff0df; }
 button:disabled { opacity: .45; cursor: not-allowed; }
@@ -460,7 +458,6 @@ button:disabled { opacity: .45; cursor: not-allowed; }
   button {
     padding: 9px 14px;
     font-size: .9rem;
-    width: 88px;
   }
 
   .progress {
